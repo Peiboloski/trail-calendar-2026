@@ -126,6 +126,29 @@
       box-shadow: 0 0 0 3px rgba(47, 89, 67, 0.12);
     }
 
+    .toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 22px;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      color: var(--ink);
+    }
+
+    .toggle input {
+      accent-color: var(--accent);
+    }
+
     .section-title {
       margin: 30px 0 10px;
       font-size: 1.05rem;
@@ -166,6 +189,16 @@
       padding: 8px 0;
       border-bottom: 1px solid #ebe5d9;
       text-decoration: none;
+    }
+
+    .month-item.favorite-item {
+      margin-inline: -6px;
+      padding: 10px 8px;
+      border: 1px solid #d7b649;
+      border-left: 6px solid #d29b16;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #fff3c9 0%, #fffaf0 100%);
+      box-shadow: 0 3px 10px rgba(210, 155, 22, 0.12);
     }
 
     .month-item:last-child {
@@ -214,6 +247,16 @@
     .event.highlight {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(47, 89, 67, 0.1);
+    }
+
+    .event.favorite-race {
+      border: 2px solid #d29b16;
+      background: linear-gradient(135deg, #fff2c6 0%, var(--paper) 42%);
+      box-shadow: 0 0 0 3px rgba(210, 155, 22, 0.12);
+    }
+
+    .event.favorite-race .event-date {
+      border-right-color: #e0c774;
     }
 
     .event-date {
@@ -283,9 +326,32 @@
     }
 
     .chip.favorite {
-      border-color: #d0b15d;
-      background: #f6edd0;
-      color: #745600;
+      border: 2px solid #b98300;
+      background: #ffd45f;
+      color: #563a00;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .chip.registered {
+      border-color: #7b9f8a;
+      background: #dcedde;
+      color: #254232;
+      font-weight: 700;
+    }
+
+    .favorite-banner {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 0 8px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #d29b16;
+      color: #fff8e7;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .sources {
@@ -381,6 +447,17 @@
           <option value="future">Aún no abre</option>
         </select>
       </div>
+    </section>
+
+    <section class="toggle-row" aria-label="Filtros rápidos">
+      <label class="toggle" for="favoriteFilter">
+        <input id="favoriteFilter" type="checkbox">
+        <span>Solo favoritas</span>
+      </label>
+      <label class="toggle" for="registeredFilter">
+        <input id="registeredFilter" type="checkbox">
+        <span>Solo inscritas</span>
+      </label>
     </section>
 
     <p class="note" id="resultNote"></p>
@@ -962,7 +1039,9 @@
       search: "",
       month: "all",
       distance: "all",
-      status: "all"
+      status: "all",
+      favoriteOnly: false,
+      registeredOnly: false
     };
 
     const statsEl = document.getElementById("stats");
@@ -1017,6 +1096,8 @@
       if (state.month !== "all" && monthKey(race) !== state.month) return false;
       if (state.status !== "all" && race.status !== state.status) return false;
       if (state.distance !== "all" && distanceBucket(race) !== state.distance) return false;
+      if (state.favoriteOnly && !race.favorite) return false;
+      if (state.registeredOnly && !race.registered) return false;
       return true;
     }
 
@@ -1067,7 +1148,7 @@
             ${grouped.get(key).map(race => {
               const date = parseDate(race.start);
               return `
-                <a class="month-item" href="#${race.id}" data-jump="${race.id}">
+                <a class="month-item ${race.favorite ? "favorite-item" : ""}" href="#${race.id}" data-jump="${race.id}">
                   <div class="daybox">
                     <strong>${date.getDate()}</strong>
                     <span>${monthNames[date.getMonth()].slice(0, 3)}</span>
@@ -1093,17 +1174,19 @@
       eventsEl.innerHTML = items.map(race => {
         const start = parseDate(race.start);
         return `
-          <article class="event" id="${race.id}">
+          <article class="event ${race.favorite ? "favorite-race" : ""}" id="${race.id}">
             <div class="event-date">
               <strong>${String(start.getDate()).padStart(2, "0")}</strong>
               <div>${monthNames[start.getMonth()]}</div>
               <small>${race.end !== race.start ? formatDateSpan(race) : "domingo"}</small>
             </div>
             <div>
+              ${race.favorite ? `<p class="favorite-banner">Carrera favorita</p>` : ""}
               <h3>${race.name}</h3>
               <p class="meta"><strong>${race.location}</strong> · ${race.drive}</p>
               <div class="chips">
                 ${race.favorite ? `<span class="chip favorite">Favorita</span>` : ""}
+                ${race.registered ? `<span class="chip registered">Inscrita</span>` : ""}
                 <span class="chip ${statusClass(race.status)}">${race.statusLabel}</span>
                 <span class="chip">${race.distanceLabel}</span>
               </div>
@@ -1120,6 +1203,10 @@
 
     function renderNote(items) {
       if (!items.length) {
+        if (state.registeredOnly) {
+          resultNoteEl.textContent = "No hay carreras marcadas como inscritas todavía.";
+          return;
+        }
         resultNoteEl.textContent = "Sin resultados con los filtros actuales.";
         return;
       }
@@ -1171,6 +1258,16 @@
 
     document.getElementById("statusFilter").addEventListener("change", event => {
       state.status = event.target.value;
+      render();
+    });
+
+    document.getElementById("favoriteFilter").addEventListener("change", event => {
+      state.favoriteOnly = event.target.checked;
+      render();
+    });
+
+    document.getElementById("registeredFilter").addEventListener("change", event => {
+      state.registeredOnly = event.target.checked;
       render();
     });
 
