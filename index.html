@@ -1,0 +1,1106 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trail 2026 desde Grenoble</title>
+  <style>
+    :root {
+      --bg: #f3efe6;
+      --paper: #fcfaf5;
+      --ink: #1f241f;
+      --muted: #5d645d;
+      --line: #d7d0c2;
+      --accent: #2f5943;
+      --accent-soft: #e3ece4;
+      --warn: #8b5a2b;
+      --warn-soft: #f2e7d7;
+      --alert: #8b2e2c;
+      --alert-soft: #f2dddd;
+      --cold: #42627a;
+      --cold-soft: #e3ecf2;
+      --shadow: 0 3px 10px rgba(20, 26, 20, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .masthead {
+      padding: 8px 0 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+
+    .masthead h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 11ch;
+    }
+
+    .masthead p,
+    .note,
+    .source-note {
+      margin: 0;
+      color: var(--muted);
+      max-width: 74ch;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .stat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 14px 15px;
+      border-radius: 10px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.65rem;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 2.1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 22px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      appearance: none;
+      border: 1px solid #bfb7a9;
+      border-radius: 8px;
+      padding: 12px 12px;
+      font: inherit;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: 2px solid transparent;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47, 89, 67, 0.12);
+    }
+
+    .section-title {
+      margin: 30px 0 10px;
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+
+    .months {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .month {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      min-height: 180px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .month h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .month-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .month-item {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #ebe5d9;
+      text-decoration: none;
+    }
+
+    .month-item:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .daybox {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-align: center;
+      padding: 6px 4px;
+      background: #f6f3ed;
+    }
+
+    .daybox strong {
+      display: block;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .daybox span,
+    .month-item small,
+    .event small {
+      color: var(--muted);
+    }
+
+    .event-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .event {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 16px;
+      scroll-margin-top: 18px;
+    }
+
+    .event.highlight {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47, 89, 67, 0.1);
+    }
+
+    .event-date {
+      border-right: 1px solid var(--line);
+      padding-right: 12px;
+    }
+
+    .event-date strong {
+      display: block;
+      font-size: 2rem;
+      line-height: 0.95;
+      margin-bottom: 4px;
+    }
+
+    .event h3 {
+      margin: 0 0 6px;
+      font-size: 1.2rem;
+      line-height: 1.15;
+    }
+
+    .meta,
+    .fit,
+    .availability {
+      margin: 0 0 8px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 8px;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      background: #f4f1ea;
+      font-size: 0.88rem;
+      color: var(--ink);
+    }
+
+    .chip.open {
+      border-color: #b9ceb7;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .chip.mixed {
+      border-color: #d7c0a0;
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+
+    .chip.full {
+      border-color: #d7b2b0;
+      background: var(--alert-soft);
+      color: var(--alert);
+    }
+
+    .chip.future {
+      border-color: #bdc9d2;
+      background: var(--cold-soft);
+      color: var(--cold);
+    }
+
+    .sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .sources a {
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .empty {
+      padding: 24px 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    @media (max-width: 960px) {
+      .stats,
+      .months {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding-inline: 14px;
+      }
+
+      .stats,
+      .months,
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .event {
+        grid-template-columns: 1fr;
+      }
+
+      .event-date {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding-right: 0;
+        padding-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <h1>Trails 2026 desde Grenoble</h1>
+      <p>Selección útil para correr este año saliendo desde Grenoble, con prioridad Isère y Alpes cercanos. Verificación hecha el 10 de marzo de 2026. Cuando una carrera no publica contador exacto, la marco como “abierta sin contador público”.</p>
+    </header>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="controls" aria-label="Filtros">
+      <div class="field">
+        <label for="search">Buscar carrera o zona</label>
+        <input id="search" type="search" placeholder="Moucherotte, Chartreuse, Annecy, 42 km...">
+      </div>
+      <div class="field">
+        <label for="monthFilter">Mes</label>
+        <select id="monthFilter">
+          <option value="all">Todos</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="distanceFilter">Distancia objetivo</label>
+        <select id="distanceFilter">
+          <option value="all">Todas</option>
+          <option value="short">Hasta 25 km</option>
+          <option value="mid">26 a 45 km</option>
+          <option value="long">46 km o más</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="statusFilter">Inscripción</label>
+        <select id="statusFilter">
+          <option value="all">Todo</option>
+          <option value="open">Abierta</option>
+          <option value="mixed">Abierta / lista de espera</option>
+          <option value="full">Completa</option>
+          <option value="future">Aún no abre</option>
+        </select>
+      </div>
+    </section>
+
+    <p class="note" id="resultNote"></p>
+
+    <h2 class="section-title">Vista mensual</h2>
+    <section class="months" id="months"></section>
+
+    <h2 class="section-title">Lista detallada</h2>
+    <section class="event-list" id="events"></section>
+
+    <p class="source-note">Fuentes enlazadas en cada carrera. El estado de plazas es el que publicaban los organizadores el 10 de marzo de 2026 o, si no daban cupo visible, la mejor lectura posible del estado oficial.</p>
+  </main>
+
+  <script>
+    const races = [
+      {
+        id: "grenoble-vizille",
+        name: "Grenoble-Vizille",
+        start: "2026-03-29",
+        end: "2026-03-29",
+        location: "Eybens / Vizille, Isère",
+        drive: "20 a 30 min desde Grenoble",
+        distanceLabel: "20 km y 30 km trail; también randos 10 / 15 / 20",
+        kmMin: 20,
+        kmMax: 30,
+        status: "full",
+        statusLabel: "Trails completos",
+        fit: "Muy cerca y muy buena para abrir temporada, pero los tres formatos trail ya están completos.",
+        availability: "El organizador indica que los formatos trail están completos. Aún quedaban plazas en las randos, también con riesgo de agotarse.",
+        urls: [
+          { label: "web oficial", href: "https://www.grenoble-vizille.fr/" },
+          { label: "estado de inscripciones", href: "https://www.grenoble-vizille.fr/%e2%84%b9%ef%b8%8f-point-inscriptions-grenoble-vizille-2026/" }
+        ]
+      },
+      {
+        id: "moucherotte",
+        name: "Trail du Moucherotte",
+        start: "2026-05-10",
+        end: "2026-05-10",
+        location: "Lans-en-Vercors, Isère",
+        drive: "35 a 45 min desde Grenoble",
+        distanceLabel: "11 km, 23 km, 41 km",
+        kmMin: 11,
+        kmMax: 41,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy buena opción local para meter un 11 km o un 23 km antes de junio. El 41 km puede servir como primer salto largo si llegas con base.",
+        availability: "El sitio oficial muestra inscripciones abiertas y no publica aviso de completo. No vi contador público de dorsales restantes.",
+        urls: [
+          { label: "web oficial", href: "https://traildumoucherotte.com/" },
+          { label: "inscripción", href: "https://in.njuko.com/trail-du-moucherotte-2026" }
+        ]
+      },
+      {
+        id: "nivolet-revard",
+        name: "Trail Nivolet-Revard",
+        start: "2026-05-03",
+        end: "2026-05-03",
+        location: "Voglans, Savoie",
+        drive: "1 h desde Grenoble",
+        distanceLabel: "7 km, 14 km, 28 km, 53 km",
+        kmMin: 7,
+        kmMax: 53,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy buena carrera de primavera si quieres elegir entre formato corto, un 28 km serio o un 53 km ya de más entidad.",
+        availability: "La web oficial indica apertura de inscripciones el 1 de enero de 2026 y mantiene el acceso a ‘S'inscrire’. No vi aviso de completo ni contador público de plazas.",
+        urls: [
+          { label: "web oficial", href: "https://www.nivoletrevard.fr/" },
+          { label: "parcours", href: "https://www.nivoletrevard.fr/parcours/" },
+          { label: "28 km", href: "https://www.nivoletrevard.fr/les-courses/malpassant-28km/" }
+        ]
+      },
+      {
+        id: "raidlight-festival",
+        name: "Raidlight Trail Festival",
+        start: "2026-05-15",
+        end: "2026-05-17",
+        location: "Saint-Pierre-de-Chartreuse, Isère",
+        drive: "45 a 55 min desde Grenoble",
+        distanceLabel: "11 km, 27 km, marathon trail, ultra et KV",
+        kmMin: 11,
+        kmMax: 64,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy interesante por cercanía y variedad. El 11 o 27 te encajan bien antes del bloque largo; el maratrail ya es buen puente hacia junio.",
+        availability: "Raidlight publicó la apertura de inscripciones para 2026 y no vi mención de completo hoy.",
+        urls: [
+          { label: "web oficial", href: "https://raidlight.com/fr/pages/trail-festival" },
+          { label: "anuncio 2026", href: "https://raidlight.com/fr/blogs/news/trail-festival-2026" }
+        ]
+      },
+      {
+        id: "maxi-race",
+        name: "MaXi-Race Annecy",
+        start: "2026-05-29",
+        end: "2026-05-31",
+        location: "Annecy, Haute-Savoie",
+        drive: "1 h 45 a 2 h desde Grenoble",
+        distanceLabel: "Marathon 38 a 42 km y otros formatos más largos",
+        kmMin: 38,
+        kmMax: 100,
+        status: "mixed",
+        statusLabel: "Sistema de preinscripción / espera",
+        fit: "Carrera muy atractiva si quieres una grande en Alpes a finales de mayo, pero no funciona como inscripción libre clásica.",
+        availability: "La organización usa preinscripción en octubre y validaciones por olas; la página de lista de espera está activa. No la contaría hoy como carrera de entrada fácil.",
+        urls: [
+          { label: "web oficial", href: "https://www.maxi-race.org/" },
+          { label: "inscripciones", href: "https://www.maxi-race.org/inscriptions/" },
+          { label: "novedades 2026", href: "https://www.maxi-race.org/nouveautes/" }
+        ]
+      },
+      {
+        id: "gypaete",
+        name: "Trail du Gypaète",
+        start: "2026-06-06",
+        end: "2026-06-06",
+        location: "Marnaz, Haute-Savoie",
+        drive: "2 h a 2 h 15 desde Grenoble",
+        distanceLabel: "14 km, 30 km, 45 km, 57 km, 76 km",
+        kmMin: 14,
+        kmMax: 76,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Si quieres una opción alpina más seria en junio, el 30 km es muy buena carrera objetivo y los formatos largos sirven para soñar un poco más adelante.",
+        availability: "La página oficial de inscripciones indica apertura a principios de diciembre de 2025 y no vi aviso de completo hoy.",
+        urls: [
+          { label: "web oficial", href: "https://www.traildugypaete.com/" },
+          { label: "inscripciones", href: "https://www.traildugypaete.com/inscriptions/" }
+        ]
+      },
+      {
+        id: "circuit-sure",
+        name: "Trail du Circuit de la Sure",
+        start: "2026-06-07",
+        end: "2026-06-07",
+        location: "Voiron, Isère",
+        drive: "25 a 35 min desde Grenoble",
+        distanceLabel: "12 km, 32 km, 59 km solo / duo / relais",
+        kmMin: 12,
+        kmMax: 59,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy buena opción local para junio. El 32 km es de las mejores carreras puente si quieres preparar una de 30 y pico sin irte lejos.",
+        availability: "Comprobado en navegador real: 32 km con 283 plazas, 12 km con 223 y formatos 59 km con plazas ilimitadas en solo, duo y relais.",
+        urls: [
+          { label: "web oficial", href: "https://trailcircuitdelasure.fr/" },
+          { label: "inscripción", href: "https://in.njuko.com/trail--circuit-de-la-sure-20261763469959605?currentPage=select-competition" }
+        ]
+      },
+      {
+        id: "oisans-matheysine",
+        name: "Trail Oisans-Matheysine",
+        start: "2026-06-07",
+        end: "2026-06-07",
+        location: "Col d'Ornon, Isère",
+        drive: "55 min a 1 h 10 desde Grenoble",
+        distanceLabel: "5 km, 12 km, 20 km, 45 km",
+        kmMin: 5,
+        kmMax: 45,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Buen bloque de transición a principios de junio. El 20 km encaja muy bien si todavía no quieres saltar tan pronto al 30 km.",
+        availability: "La mairie d'Ornon publica las inscripciones 2026 abiertas y el reglamento confirma inscripción online y sobre el terreno.",
+        urls: [
+          { label: "info oficial", href: "https://mairie.ornon.fr/trail-oisans-matheysine-2026-dimanche-7-juin-2026/" },
+          { label: "reglamento", href: "https://files.finishers.com/events/reu4B/files/ReI%CC%80__glement%20TOM%202026%20%281%29.pdf" }
+        ]
+      },
+      {
+        id: "gerbier",
+        name: "Trail du Gerbier",
+        start: "2026-06-14",
+        end: "2026-06-14",
+        location: "Le Gua / Prélenfrey, Isère",
+        drive: "30 a 40 min desde Grenoble",
+        distanceLabel: "12 km, 22 km, 37 km",
+        kmMin: 12,
+        kmMax: 37,
+        status: "mixed",
+        statusLabel: "Confirmada",
+        fit: "Muy buena carrera local de junio. El 22 km te encaja si quieres seguir contenido; el 37 km ya es un salto serio antes del verano pleno.",
+        availability: "Finishers ya carga la edición 2026 y la web oficial sigue activa, pero no confirmé un contador público de plazas ni el formulario directo.",
+        urls: [
+          { label: "web oficial", href: "https://www.traildugerbier.fr/" },
+          { label: "ficha 2026", href: "https://www.finishers.com/course/trail-du-gerbier" }
+        ]
+      },
+      {
+        id: "voreppe",
+        name: "Les Foulées de Voreppe",
+        start: "2026-06-14",
+        end: "2026-06-14",
+        location: "Voreppe, Isère",
+        drive: "20 a 25 min desde Grenoble",
+        distanceLabel: "7,5 km, 15 km, 23 km; también 10 km route",
+        kmMin: 7.5,
+        kmMax: 23,
+        status: "mixed",
+        statusLabel: "Confirmada",
+        fit: "Muy práctica por cercanía. El 15 km es buena carrera de transición y el 23 km puede servirte como último paso antes de irte a un 30 km.",
+        availability: "La web oficial está ya en modo 2026 y muestra los formatos, pero todavía no localicé un formulario público de inscripción con plazas.",
+        urls: [
+          { label: "web oficial", href: "https://www.fouleesvoreppe.fr/" },
+          { label: "23 km", href: "https://www.fouleesvoreppe.fr/trail-la-chalaisienne/" }
+        ]
+      },
+      {
+        id: "aravistrail",
+        name: "ASICS AravisTrail",
+        start: "2026-06-20",
+        end: "2026-06-20",
+        location: "Thônes, Haute-Savoie",
+        drive: "1 h 45 a 2 h desde Grenoble",
+        distanceLabel: "10 km, 20 km, 48 km y formatos duo",
+        kmMin: 10,
+        kmMax: 48,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy buena carrera alpina de junio si quieres un 20 km de calidad o un 48 km como objetivo bastante más ambicioso.",
+        availability: "La web oficial comunica expresamente que las inscripciones 2026 están abiertas.",
+        urls: [
+          { label: "web oficial", href: "https://www.aravistrail.fr/content/accueil" },
+          { label: "sitio evento", href: "https://aravistrail-asics.com/" },
+          { label: "inscripción", href: "https://www.aravistrail.fr/content/inscription" }
+        ]
+      },
+      {
+        id: "trail-tour",
+        name: "Trail de la Tour",
+        start: "2026-06-20",
+        end: "2026-06-20",
+        location: "Anneyron, Drôme",
+        drive: "1 h 20 a 1 h 35 desde Grenoble",
+        distanceLabel: "9 km, 13 km, 21 km",
+        kmMin: 9,
+        kmMax: 21,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "No es alta montaña, pero como carrera de junio te sirve si quieres una opción más accesible y mantenerte en distancias controladas.",
+        availability: "La web oficial mantiene activo el acceso ‘Je m'inscris’ hacia Finishers.",
+        urls: [
+          { label: "web oficial", href: "https://traildelatour.fr/" },
+          { label: "reglamento 2026", href: "https://traildelatour.fr/wp-content/uploads/2025/12/Reglement-Trail-de-la-Tour-2026.pdf" }
+        ]
+      },
+      {
+        id: "lac-noir",
+        name: "Trail du Lac Noir",
+        start: "2026-06-20",
+        end: "2026-06-20",
+        location: "Montsapey, Savoie",
+        drive: "1 h 20 a 1 h 35 desde Grenoble",
+        distanceLabel: "12,5 km, 25 km",
+        kmMin: 12.5,
+        kmMax: 25,
+        status: "mixed",
+        statusLabel: "Confirmada",
+        fit: "Muy interesante si buscas una carrera alpina compacta: el 25 km es corto en distancia pero con desnivel serio.",
+        availability: "La ficha 2026 ya está publicada con fecha y desniveles, pero no confirmé aún un formulario público con contador de plazas.",
+        urls: [
+          { label: "ficha 2026", href: "https://www.le-sportif.com/calendrier/223221/trail-du-lac-noir-2026-montsapey/trail-course-nature/" }
+        ]
+      },
+      {
+        id: "bernex",
+        name: "Bernex Trail Challenge",
+        start: "2026-06-20",
+        end: "2026-06-21",
+        location: "Bernex, Haute-Savoie",
+        drive: "2 h a 2 h 15 desde Grenoble",
+        distanceLabel: "8 km, 21 km, 30 km, 62 km y relais",
+        kmMin: 8,
+        kmMax: 62,
+        status: "mixed",
+        statusLabel: "Mixta: abierta y espera",
+        fit: "Muy buena alternativa alpina en junio. El 30 km es de las opciones más claras si quieres un objetivo serio antes del verano pleno.",
+        availability: "Comprobado en navegador real: 8 km con 256 plazas, 21 km completo con lista de espera, 30 km con 105, 62 km con 115 y relais con 80.",
+        urls: [
+          { label: "web oficial", href: "https://www.bernextrailchallenge.fr/" },
+          { label: "inscripción", href: "https://in.njuko.com/bernex-trail-challenge-2026?currentPage=select-competition" }
+        ]
+      },
+      {
+        id: "ecrins",
+        name: "Grand Trail des Écrins",
+        start: "2026-06-20",
+        end: "2026-06-20",
+        location: "Vallouise-Pelvoux, Hautes-Alpes",
+        drive: "2 h 30 a 2 h 45 desde Grenoble",
+        distanceLabel: "12 km, 25 km, 34 km, 59 km solo / duo",
+        kmMin: 12,
+        kmMax: 59,
+        status: "mixed",
+        statusLabel: "Casi completo",
+        fit: "Si te apetece una carrera de montaña más alpina en junio, aquí el 25 o el 34 habrían sido muy buenos objetivos, pero llegan bastante tensos.",
+        availability: "La página de inscripción muestra completos el 25, 34 y 59 km solo/duo. Solo quedaban 23 plazas en la Vallouisette 12 km al comprobarlo.",
+        urls: [
+          { label: "web oficial", href: "https://www.grand-trail-des-ecrins.com/" },
+          { label: "inscripción", href: "https://inscriptions.as2pic.org/grand-trail-des-ecrins-2026" }
+        ]
+      },
+      {
+        id: "arly-cimes",
+        name: "Arly Cimes Trail",
+        start: "2026-06-21",
+        end: "2026-06-21",
+        location: "Crest-Voland Cohennoz, Savoie",
+        drive: "1 h 50 a 2 h 05 desde Grenoble",
+        distanceLabel: "13 km, 25 km",
+        kmMin: 13,
+        kmMax: 25,
+        status: "mixed",
+        statusLabel: "Confirmada",
+        fit: "Muy buena opción si quieres una media de montaña en Savoie sin irte aún a formatos largos o ultras.",
+        availability: "La ficha 2026 ya está publicada con fecha y distancias, pero no confirmé todavía un formulario directo con plazas restantes.",
+        urls: [
+          { label: "ficha 2026", href: "https://www.le-sportif.com/calendrier/223222/arly-cimes-trail-2026-crest-voland-cohennoz/trail-course-nature/" },
+          { label: "página evento", href: "http://www.valdarly-montblanc.com/fr/ete/agenda/les-grands-evenements/arly-cimes-trail/" }
+        ]
+      },
+      {
+        id: "mont-blanc",
+        name: "Marathon du Mont-Blanc",
+        start: "2026-06-25",
+        end: "2026-06-28",
+        location: "Chamonix, Haute-Savoie",
+        drive: "2 h 20 a 2 h 40 desde Grenoble",
+        distanceLabel: "10 km, 23 km, 42 km, 90 km, KV, Duo Étoile",
+        kmMin: 10,
+        kmMax: 90,
+        status: "mixed",
+        statusLabel: "Sorteo y cupos mixtos",
+        fit: "Es de las grandes del calendario. Para ti solo tendría sentido como 10 km o KV este año, o como objetivo muy ambicioso si cambias el plan.",
+        availability: "La organización usa sorteo para 23/42/90/Duo; el 10 km y el KV abrieron sin sorteo desde noviembre de 2025 hasta agotar plazas.",
+        urls: [
+          { label: "web oficial", href: "https://www.marathonmontblanc.fr/en" },
+          { label: "inscripciones", href: "https://www.marathonmontblanc.fr/coureurs/inscriptions" }
+        ]
+      },
+      {
+        id: "nano-trail",
+        name: "Nano Trail",
+        start: "2026-06-27",
+        end: "2026-06-27",
+        location: "Coise Saint-Jean, Savoie",
+        drive: "1 h 05 a 1 h 20 desde Grenoble",
+        distanceLabel: "11 km, 16 km, 27 km y marcha 10 km",
+        kmMin: 10,
+        kmMax: 27,
+        status: "mixed",
+        statusLabel: "Confirmada",
+        fit: "Muy buena opción de final de junio si quieres una distancia media de 27 km como paso previo a un 30-35 km en julio.",
+        availability: "La ficha 2026 ya aparece cargada con todas las distancias, pero me falta localizar el formulario directo para confirmar plazas.",
+        urls: [
+          { label: "ficha 2026", href: "https://www.le-sportif.com/calendrier/221119/nano-trail-2026-coise-st-jean/trail-course-nature/" }
+        ]
+      },
+      {
+        id: "grand-duc",
+        name: "Trail du Grand Duc",
+        start: "2026-06-28",
+        end: "2026-06-28",
+        location: "Plateau des Petites Roches, Isère / Chartreuse",
+        drive: "35 a 45 min desde Grenoble",
+        distanceLabel: "10 km, 28 km, 44 km, 72 km",
+        kmMin: 10,
+        kmMax: 72,
+        status: "mixed",
+        statusLabel: "Algunos formatos completos",
+        fit: "Muy buena fecha para meter un 28 km o un 44 km a final de junio sin irte lejos, y además en terreno de Chartreuse muy agradecido para preparar verano.",
+        availability: "Comprobado en navegador real: 10 km con 219 plazas; 30 km agotado con lista de espera; relais à 5 con 1 plaza; 44 km y 72 km en espera.",
+        urls: [
+          { label: "web oficial", href: "https://www.grandduc.fr/" },
+          { label: "inscripción", href: "https://grandduc.fr/inscription-trail-du-grand-duc/" },
+          { label: "actualización 2026", href: "https://grandduc.fr/evolution-des-inscriptions/" }
+        ]
+      },
+      {
+        id: "passerelles",
+        name: "Trail des Passerelles Monteynard",
+        start: "2026-07-11",
+        end: "2026-07-12",
+        location: "Lac de Monteynard, Isère",
+        drive: "45 min desde Grenoble",
+        distanceLabel: "De 13 km a 62 km",
+        kmMin: 13,
+        kmMax: 62,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy buena por cercanía y terreno para un paso intermedio. Tienes formatos cortos, medios y uno largo serio sin salir de Isère.",
+        availability: "El sitio oficial anuncia inscripciones abiertas hasta el 9 de julio de 2026. No vi aviso de completo ni contador público por formato.",
+        urls: [
+          { label: "web oficial", href: "https://trail-passerelles-monteynard.fr/" },
+          { label: "programa 2026", href: "https://trail-passerelles-monteynard.fr/programme/" }
+        ]
+      },
+      {
+        id: "ut4m",
+        name: "Ut4M",
+        start: "2026-07-16",
+        end: "2026-07-19",
+        location: "Grenoble et 4 massifs",
+        drive: "Salida en casa",
+        distanceLabel: "20, 40, 50, 80, 100 y 180 km; también EN 10K",
+        kmMin: 10,
+        kmMax: 180,
+        status: "mixed",
+        statusLabel: "Abierta con lista de espera",
+        fit: "Objetivo muy lógico viviendo en Grenoble. Las medias y 40 km son excelentes objetivos de verano; 50/80 ya son apuestas más serias.",
+        availability: "Ut4M abrió inscripciones el 15 de diciembre de 2025 y publicó lista de espera el 27 de febrero de 2026. Yo asumiría cupos tensos o agotados en varios formatos.",
+        urls: [
+          { label: "web oficial", href: "https://ut4m.fr/" },
+          { label: "las 12 carreras", href: "https://ut4m.fr/fr/courses/les-12-courses" }
+        ]
+      },
+      {
+        id: "oisans-trail-tour",
+        name: "Oisans Trail Tour",
+        start: "2026-07-16",
+        end: "2026-07-18",
+        location: "Vaujany / Oz-en-Oisans, Isère",
+        drive: "1 h 10 a 1 h 25 desde Grenoble",
+        distanceLabel: "10 km, 28 km, 39 km, 88 km",
+        kmMin: 10,
+        kmMax: 88,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy buena escalera de progresión: 28 km si quieres puente, 39 km como gran objetivo de verano, 88 km solo si el año se va muy arriba.",
+        availability: "El sitio oficial mantiene inscripciones abiertas; la propia comunicación indica menos de 50 dorsales en el 88 km, sin aviso de completo para el resto.",
+        urls: [
+          { label: "web oficial", href: "https://oisanstrailtour.fr/" },
+          { label: "programa 2026", href: "https://oisanstrailtour.fr/programme-2026/" },
+          { label: "inscripción", href: "https://oisanstrailtour.fr/inscription/" }
+        ]
+      },
+      {
+        id: "la6000d",
+        name: "La 6000D",
+        start: "2026-07-30",
+        end: "2026-08-01",
+        location: "La Plagne, Savoie",
+        drive: "2 h 15 a 2 h 30 desde Grenoble",
+        distanceLabel: "21 km, 30 km, 43 km, 69 km y otros formatos",
+        kmMin: 21,
+        kmMax: 69,
+        status: "open",
+        statusLabel: "Abierta",
+        fit: "Muy buena para buscar un 43 km alpino en pleno verano. Si prefieres progresión más conservadora, el 21 o el 30 siguen siendo sólidos.",
+        availability: "Las inscripciones 2026 están abiertas desde el 13 de noviembre de 2025 y cierran el 26 de julio de 2026. No vi mensaje de completo por formatos.",
+        urls: [
+          { label: "web oficial", href: "https://www.la6000d.com/" },
+          { label: "inscripciones", href: "https://www.la6000d.com/inscriptions/" }
+        ]
+      },
+      {
+        id: "echappee-belle",
+        name: "L'Échappée Belle",
+        start: "2026-08-20",
+        end: "2026-08-23",
+        location: "Belledonne, Isère / Savoie",
+        drive: "Salida cercana según formato",
+        distanceLabel: "12 km, 27 km, 42 km, 87 km, 149 km",
+        kmMin: 12,
+        kmMax: 149,
+        status: "mixed",
+        statusLabel: "Según formato: abierta o espera",
+        fit: "Si te apetece un gran objetivo local de montaña, el 42 km es el formato más razonable este año. El 27 km también es muy atractivo si quieres quedarte algo más corto.",
+        availability: "La web muestra ‘inscription ou liste d'attente’. El estado parece depender del formato, así que conviene revisar cada distancia antes de decidir.",
+        urls: [
+          { label: "web oficial", href: "https://echappeebelle.com/" },
+          { label: "lista de cursos", href: "https://echappeebelle.com/courses/" }
+        ]
+      },
+      {
+        id: "aiguilles-rouges",
+        name: "Trail des Aiguilles Rouges",
+        start: "2026-09-27",
+        end: "2026-09-27",
+        location: "Chamonix, Haute-Savoie",
+        drive: "2 h 20 a 2 h 40 desde Grenoble",
+        distanceLabel: "9 km, 18 km, 50 km",
+        kmMin: 9,
+        kmMax: 50,
+        status: "future",
+        statusLabel: "Aún no abre",
+        fit: "Muy buena carrera de final de verano si acabas el bloque largo con confianza. El 50 km ya es reto serio y muy bonito.",
+        availability: "La organización fija la apertura el 1 de abril de 2026 a las 12:00. Cupos anunciados: 650 en el TAR, 400 en el P'tit TAR y 200 en el Mini TAR.",
+        urls: [
+          { label: "web oficial", href: "https://www.aiguillesrouges.fr/" },
+          { label: "inscripciones", href: "https://www.aiguillesrouges.fr/inscriptions-tar" }
+        ]
+      }
+    ];
+
+    const monthNames = [
+      "enero", "febrero", "marzo", "abril", "mayo", "junio",
+      "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ];
+
+    const state = {
+      search: "",
+      month: "all",
+      distance: "all",
+      status: "all"
+    };
+
+    const statsEl = document.getElementById("stats");
+    const monthsEl = document.getElementById("months");
+    const eventsEl = document.getElementById("events");
+    const resultNoteEl = document.getElementById("resultNote");
+    const monthFilterEl = document.getElementById("monthFilter");
+
+    function parseDate(date) {
+      return new Date(date + "T12:00:00");
+    }
+
+    function formatDateSpan(race) {
+      const start = parseDate(race.start);
+      const end = parseDate(race.end);
+      const sameDay = race.start === race.end;
+      const startDay = start.getDate();
+      const endDay = end.getDate();
+      const startMonth = monthNames[start.getMonth()];
+      const endMonth = monthNames[end.getMonth()];
+      if (sameDay) return `${startDay} ${startMonth} 2026`;
+      if (startMonth === endMonth) return `${startDay} a ${endDay} ${startMonth} 2026`;
+      return `${startDay} ${startMonth} a ${endDay} ${endMonth} 2026`;
+    }
+
+    function monthKey(race) {
+      const d = parseDate(race.start);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function monthLabel(key) {
+      const [, month] = key.split("-");
+      return monthNames[Number(month) - 1];
+    }
+
+    function distanceBucket(race) {
+      if (race.kmMax <= 25) return "short";
+      if (race.kmMax <= 45) return "mid";
+      return "long";
+    }
+
+    function matches(race) {
+      const haystack = [
+        race.name,
+        race.location,
+        race.distanceLabel,
+        race.fit,
+        race.availability
+      ].join(" ").toLowerCase();
+
+      if (state.search && !haystack.includes(state.search)) return false;
+      if (state.month !== "all" && monthKey(race) !== state.month) return false;
+      if (state.status !== "all" && race.status !== state.status) return false;
+      if (state.distance !== "all" && distanceBucket(race) !== state.distance) return false;
+      return true;
+    }
+
+    function filteredRaces() {
+      return races
+        .filter(matches)
+        .sort((a, b) => parseDate(a.start) - parseDate(b.start));
+    }
+
+    function statusClass(status) {
+      return status;
+    }
+
+    function renderStats(items) {
+      const total = items.length;
+      const open = items.filter(item => item.status === "open").length;
+      const mixed = items.filter(item => item.status === "mixed").length;
+      const constrained = items.filter(item => item.status === "full" || item.status === "future").length;
+
+      statsEl.innerHTML = [
+        { value: total, label: "carreras visibles" },
+        { value: open, label: "abiertas hoy" },
+        { value: mixed, label: "con espera o estado mixto" },
+        { value: constrained, label: "cerradas o aún no abiertas" }
+      ].map(stat => `
+        <article class="stat">
+          <strong>${stat.value}</strong>
+          <span>${stat.label}</span>
+        </article>
+      `).join("");
+    }
+
+    function renderMonths(items) {
+      const grouped = new Map();
+
+      items.forEach(race => {
+        const key = monthKey(race);
+        if (!grouped.has(key)) grouped.set(key, []);
+        grouped.get(key).push(race);
+      });
+
+      const monthKeys = Array.from(grouped.keys()).sort();
+
+      monthsEl.innerHTML = monthKeys.map(key => `
+        <section class="month">
+          <h2>${monthLabel(key)}</h2>
+          <div class="month-list">
+            ${grouped.get(key).map(race => {
+              const date = parseDate(race.start);
+              return `
+                <a class="month-item" href="#${race.id}" data-jump="${race.id}">
+                  <div class="daybox">
+                    <strong>${date.getDate()}</strong>
+                    <span>${monthNames[date.getMonth()].slice(0, 3)}</span>
+                  </div>
+                  <div>
+                    <div>${race.name}</div>
+                    <small>${race.distanceLabel}</small>
+                  </div>
+                </a>
+              `;
+            }).join("")}
+          </div>
+        </section>
+      `).join("");
+    }
+
+    function renderEvents(items) {
+      if (!items.length) {
+        eventsEl.innerHTML = `<div class="empty">No sale ninguna carrera con estos filtros. Prueba a quitar el filtro de mes o el de estado.</div>`;
+        return;
+      }
+
+      eventsEl.innerHTML = items.map(race => {
+        const start = parseDate(race.start);
+        return `
+          <article class="event" id="${race.id}">
+            <div class="event-date">
+              <strong>${String(start.getDate()).padStart(2, "0")}</strong>
+              <div>${monthNames[start.getMonth()]}</div>
+              <small>${race.end !== race.start ? formatDateSpan(race) : "domingo"}</small>
+            </div>
+            <div>
+              <h3>${race.name}</h3>
+              <p class="meta"><strong>${race.location}</strong> · ${race.drive}</p>
+              <div class="chips">
+                <span class="chip ${statusClass(race.status)}">${race.statusLabel}</span>
+                <span class="chip">${race.distanceLabel}</span>
+              </div>
+              <p class="fit">${race.fit}</p>
+              <p class="availability"><strong>Inscripción y plazas:</strong> ${race.availability}</p>
+              <div class="sources">
+                ${race.urls.map(url => `<a href="${url.href}" target="_blank" rel="noreferrer">${url.label}</a>`).join("")}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderNote(items) {
+      if (!items.length) {
+        resultNoteEl.textContent = "Sin resultados con los filtros actuales.";
+        return;
+      }
+
+      const next = items[0];
+      resultNoteEl.textContent = `${items.length} carreras visibles. La siguiente en calendario es ${next.name}, el ${formatDateSpan(next)}.`;
+    }
+
+    function populateMonths() {
+      const uniqueMonths = Array.from(new Set(
+        races
+          .slice()
+          .sort((a, b) => parseDate(a.start) - parseDate(b.start))
+          .map(monthKey)
+      ));
+
+      monthFilterEl.innerHTML = `
+        <option value="all">Todos</option>
+        ${uniqueMonths.map(key => `<option value="${key}">${monthLabel(key)}</option>`).join("")}
+      `;
+    }
+
+    function render() {
+      const items = filteredRaces();
+      renderStats(items);
+      renderMonths(items);
+      renderEvents(items);
+      renderNote(items);
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll(".event.highlight").forEach(node => node.classList.remove("highlight"));
+    }
+
+    document.getElementById("search").addEventListener("input", event => {
+      state.search = event.target.value.trim().toLowerCase();
+      render();
+    });
+
+    document.getElementById("monthFilter").addEventListener("change", event => {
+      state.month = event.target.value;
+      render();
+    });
+
+    document.getElementById("distanceFilter").addEventListener("change", event => {
+      state.distance = event.target.value;
+      render();
+    });
+
+    document.getElementById("statusFilter").addEventListener("change", event => {
+      state.status = event.target.value;
+      render();
+    });
+
+    document.addEventListener("click", event => {
+      const link = event.target.closest("[data-jump]");
+      if (!link) return;
+      const target = document.getElementById(link.dataset.jump);
+      if (!target) return;
+      clearHighlights();
+      target.classList.add("highlight");
+    });
+
+    populateMonths();
+    render();
+  </script>
+</body>
+</html>
