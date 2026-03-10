@@ -282,6 +282,12 @@
       color: var(--cold);
     }
 
+    .chip.favorite {
+      border-color: #d0b15d;
+      background: #f6edd0;
+      color: #745600;
+    }
+
     .sources {
       display: flex;
       flex-wrap: wrap;
@@ -592,6 +598,7 @@
         distanceLabel: "12 km, 32 km, 59 km solo / duo / relais",
         kmMin: 12,
         kmMax: 59,
+        favorite: true,
         status: "open",
         statusLabel: "Abierta",
         fit: "Muy buena opción local para junio. El 32 km es de las mejores carreras puente si quieres preparar una de 30 y pico sin irte lejos.",
@@ -1066,7 +1073,7 @@
                     <span>${monthNames[date.getMonth()].slice(0, 3)}</span>
                   </div>
                   <div>
-                    <div>${race.name}</div>
+                    <div>${race.favorite ? "Favorita · " : ""}${race.name}</div>
                     <small>${race.distanceLabel}</small>
                   </div>
                 </a>
@@ -1096,6 +1103,7 @@
               <h3>${race.name}</h3>
               <p class="meta"><strong>${race.location}</strong> · ${race.drive}</p>
               <div class="chips">
+                ${race.favorite ? `<span class="chip favorite">Favorita</span>` : ""}
                 <span class="chip ${statusClass(race.status)}">${race.statusLabel}</span>
                 <span class="chip">${race.distanceLabel}</span>
               </div>
