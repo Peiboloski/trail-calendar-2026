@@ -1,0 +1,787 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trail 2027 desde Grenoble</title>
+  <style>
+    :root {
+      --bg: #f3efe6;
+      --paper: #fcfaf5;
+      --ink: #1f241f;
+      --muted: #5d645d;
+      --line: #d7d0c2;
+      --accent: #2f5943;
+      --accent-soft: #e3ece4;
+      --warn: #8b5a2b;
+      --warn-soft: #f2e7d7;
+      --alert: #8b2e2c;
+      --alert-soft: #f2dddd;
+      --cold: #42627a;
+      --cold-soft: #e3ecf2;
+      --shadow: 0 3px 10px rgba(20, 26, 20, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Avenir Next", "Helvetica Neue", Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 20px 48px;
+    }
+
+    .masthead {
+      padding: 8px 0 20px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 22px;
+    }
+
+    .masthead h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 11ch;
+    }
+
+    .masthead p,
+    .note,
+    .source-note {
+      margin: 0;
+      color: var(--muted);
+      max-width: 74ch;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 22px 0;
+    }
+
+    .stat {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 14px 15px;
+      border-radius: 10px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.65rem;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 2.1fr 1fr 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 22px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      appearance: none;
+      border: 1px solid #bfb7a9;
+      border-radius: 8px;
+      padding: 12px 12px;
+      font: inherit;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: 2px solid transparent;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47, 89, 67, 0.12);
+    }
+
+    .toggle-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 22px;
+    }
+
+    .toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      color: var(--ink);
+    }
+
+    .toggle input {
+      accent-color: var(--accent);
+    }
+
+    .section-title {
+      margin: 30px 0 10px;
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+
+    .months {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .month {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      min-height: 180px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .month h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .month-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .month-item {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #ebe5d9;
+      text-decoration: none;
+    }
+
+    .month-item.favorite-item {
+      margin-inline: -6px;
+      padding: 10px 8px;
+      border: 1px solid #d7b649;
+      border-left: 6px solid #d29b16;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #fff3c9 0%, #fffaf0 100%);
+      box-shadow: 0 3px 10px rgba(210, 155, 22, 0.12);
+    }
+
+    .month-item:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .daybox {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      text-align: center;
+      padding: 6px 4px;
+      background: #f6f3ed;
+    }
+
+    .daybox strong {
+      display: block;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    .daybox span,
+    .month-item small,
+    .event small {
+      color: var(--muted);
+    }
+
+    .event-list {
+      display: grid;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .event {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr);
+      gap: 16px;
+      scroll-margin-top: 18px;
+    }
+
+    .event.highlight {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(47, 89, 67, 0.1);
+    }
+
+    .event.favorite-race {
+      border: 2px solid #d29b16;
+      background: linear-gradient(135deg, #fff2c6 0%, var(--paper) 42%);
+      box-shadow: 0 0 0 3px rgba(210, 155, 22, 0.12);
+    }
+
+    .event.favorite-race .event-date {
+      border-right-color: #e0c774;
+    }
+
+    .event-date {
+      border-right: 1px solid var(--line);
+      padding-right: 12px;
+    }
+
+    .event-date strong {
+      display: block;
+      font-size: 2rem;
+      line-height: 0.95;
+      margin-bottom: 4px;
+    }
+
+    .event h3 {
+      margin: 0 0 6px;
+      font-size: 1.2rem;
+      line-height: 1.15;
+    }
+
+    .meta,
+    .fit,
+    .availability {
+      margin: 0 0 8px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 8px;
+      padding: 4px 8px;
+      border: 1px solid var(--line);
+      background: #f4f1ea;
+      font-size: 0.88rem;
+      color: var(--ink);
+    }
+
+    .chip.open {
+      border-color: #b9ceb7;
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .chip.mixed {
+      border-color: #d7c0a0;
+      background: var(--warn-soft);
+      color: var(--warn);
+    }
+
+    .chip.full {
+      border-color: #d7b2b0;
+      background: var(--alert-soft);
+      color: var(--alert);
+    }
+
+    .chip.future {
+      border-color: #bdc9d2;
+      background: var(--cold-soft);
+      color: var(--cold);
+    }
+
+    .chip.favorite {
+      border: 2px solid #b98300;
+      background: #ffd45f;
+      color: #563a00;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .chip.registered {
+      border-color: #7b9f8a;
+      background: #dcedde;
+      color: #254232;
+      font-weight: 700;
+    }
+
+    .favorite-banner {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 0 8px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #d29b16;
+      color: #fff8e7;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .sources {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .sources a {
+      text-decoration: none;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .empty {
+      padding: 24px 18px;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+    }
+
+    @media (max-width: 960px) {
+      .stats,
+      .months {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding-inline: 14px;
+      }
+
+      .stats,
+      .months,
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .event {
+        grid-template-columns: 1fr;
+      }
+
+      .event-date {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+        padding-right: 0;
+        padding-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="masthead">
+      <nav aria-label="Año del calendario"><a href="index.html">2026</a> · <a href="2027.html">2027</a></nav>
+      <h1>Trails 2027 desde Grenoble</h1>
+      <p>Primeras dos carreras para 2027 desde Grenoble. Datos consultados el 3 de noviembre de 2026. Las fechas pendientes no se estiman a partir de ediciones anteriores.</p>
+    </header>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="controls" aria-label="Filtros">
+      <div class="field">
+        <label for="search">Buscar carrera o zona</label>
+        <input id="search" type="search" placeholder="Matheysins, Rif Bel, Guillestre, 25 km...">
+      </div>
+      <div class="field">
+        <label for="monthFilter">Mes</label>
+        <select id="monthFilter">
+          <option value="all">Todos</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="distanceFilter">Distancia objetivo</label>
+        <select id="distanceFilter">
+          <option value="all">Todas</option>
+          <option value="short">Hasta 25 km</option>
+          <option value="mid">26 a 45 km</option>
+          <option value="long">46 km o más</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="statusFilter">Inscripción</label>
+        <select id="statusFilter">
+          <option value="all">Todo</option>
+          <option value="open">Abierta</option>
+          <option value="mixed">Abierta / lista de espera</option>
+          <option value="full">Completa</option>
+          <option value="future">Aún no abre</option><option value="unknown">Por confirmar</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="toggle-row" aria-label="Filtros rápidos">
+      <label class="toggle" for="favoriteFilter">
+        <input id="favoriteFilter" type="checkbox">
+        <span>Solo favoritas</span>
+      </label>
+      <label class="toggle" for="registeredFilter">
+        <input id="registeredFilter" type="checkbox">
+        <span>Solo inscritas</span>
+      </label>
+    </section>
+
+    <p class="note" id="resultNote"></p>
+
+    <h2 class="section-title">Vista mensual</h2>
+    <section class="months" id="months"></section>
+
+    <h2 class="section-title">Lista detallada</h2>
+    <section class="event-list" id="events"></section>
+
+    <p class="source-note">Fuentes oficiales enlazadas en cada carrera. Consulta: 3 de noviembre de 2026. Matheysins aún publica su edición 2026; distancia y desnivel son referencias de esa edición, pendientes de confirmar para 2027. Los estados de inscripción no se actualizan automáticamente.</p>
+  </main>
+
+  <script>
+    const races = [
+  {
+    "id": "matheysins",
+    "name": "SkyRace® des Matheysins",
+    "start": null,
+    "end": null,
+    "location": "Saint-Honoré, Isère, Francia",
+    "drive": "Trayecto desde Grenoble por planificar",
+    "distanceLabel": "25 km · 1.950 m D+ (referencia 2026)",
+    "kmMin": 25,
+    "kmMax": 25,
+    "status": "unknown",
+    "statusLabel": "Edición 2027 por confirmar",
+    "fit": "Recorrido técnico con cuerdas fijas en algunos tramos. Distancia y desnivel publicados para 2026; revisar los datos de 2027 cuando se anuncien.",
+    "availability": "La página oficial sigue anunciando el 3 de mayo de 2026. Fecha, horario e inscripción 2027 pendientes de confirmar.",
+    "urls": [
+      {
+        "label": "web oficial y recorrido",
+        "href": "https://www.skyrace-des-matheysins.com/skyrace-des-matheysins"
+      }
+    ]
+  },
+  {
+    "id": "rif-bel",
+    "name": "SkyRace du Rif Bel",
+    "start": "2027-07-03",
+    "end": "2027-07-03",
+    "location": "Guillestre, Hautes-Alpes, Francia",
+    "drive": "Trayecto desde Grenoble por planificar",
+    "distanceLabel": "25 km · 1.750 m D+",
+    "kmMin": 25,
+    "kmMax": 25,
+    "status": "open",
+    "statusLabel": "Inscripción 2027 anunciada abierta",
+    "fit": "El formato de 25 km del Grand Raid du Guillestrois-Queyras. Salida el sábado 3 de julio de 2027 a las 09:00 desde la place Joseph Salva de Guillestre.",
+    "availability": "La organización anuncia apertura el 1 de noviembre de 2026 y enlaza las inscripciones 2027. Disponibilidad de dorsales por comprobar en la plataforma.",
+    "urls": [
+      {
+        "label": "presentación oficial",
+        "href": "https://grandraidduguillestrois-queyras.com/levenement-2/"
+      },
+      {
+        "label": "programa 2027",
+        "href": "https://grandraidduguillestrois-queyras.com/le-programme/"
+      },
+      {
+        "label": "web e inscripciones 2027",
+        "href": "https://grandraidduguillestrois-queyras.com/"
+      }
+    ]
+  }
+];
+
+    const monthNames = [
+      "enero", "febrero", "marzo", "abril", "mayo", "junio",
+      "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"
+    ];
+
+    const state = {
+      search: "",
+      month: "all",
+      distance: "all",
+      status: "all",
+      favoriteOnly: false,
+      registeredOnly: false
+    };
+
+    const statsEl = document.getElementById("stats");
+    const monthsEl = document.getElementById("months");
+    const eventsEl = document.getElementById("events");
+    const resultNoteEl = document.getElementById("resultNote");
+    const monthFilterEl = document.getElementById("monthFilter");
+
+    function parseDate(date) {
+      return new Date(date + "T12:00:00");
+    }
+
+    function formatDateSpan(race) {
+      if (!race.start) return "Fecha 2027 por confirmar";
+      const start = parseDate(race.start);
+      const end = parseDate(race.end);
+      const sameDay = race.start === race.end;
+      const startDay = start.getDate();
+      const endDay = end.getDate();
+      const startMonth = monthNames[start.getMonth()];
+      const endMonth = monthNames[end.getMonth()];
+      if (sameDay) return `${startDay} ${startMonth} 2027`;
+      if (startMonth === endMonth) return `${startDay} a ${endDay} ${startMonth} 2027`;
+      return `${startDay} ${startMonth} a ${endDay} ${endMonth} 2027`;
+    }
+
+    function monthKey(race) {
+      if (!race.start) return "pending";
+      const d = parseDate(race.start);
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function monthLabel(key) {
+      if (key === "pending") return "Fecha por confirmar";
+      const [, month] = key.split("-");
+      return monthNames[Number(month) - 1];
+    }
+
+    function distanceBucket(race) {
+      if (race.kmMax <= 25) return "short";
+      if (race.kmMax <= 45) return "mid";
+      return "long";
+    }
+
+    function matches(race) {
+      const haystack = [
+        race.name,
+        race.location,
+        race.distanceLabel,
+        race.fit,
+        race.availability
+      ].join(" ").toLowerCase();
+
+      if (state.search && !haystack.includes(state.search)) return false;
+      if (state.month !== "all" && monthKey(race) !== state.month) return false;
+      if (state.status !== "all" && race.status !== state.status) return false;
+      if (state.distance !== "all" && distanceBucket(race) !== state.distance) return false;
+      if (state.favoriteOnly && !race.favorite) return false;
+      if (state.registeredOnly && !race.registered) return false;
+      return true;
+    }
+
+    function filteredRaces() {
+      return races
+        .filter(matches)
+        .sort((a, b) => (a.start ? parseDate(a.start).getTime() : Infinity) - (b.start ? parseDate(b.start).getTime() : Infinity));
+    }
+
+    function statusClass(status) {
+      return status;
+    }
+
+    function renderStats(items) {
+      const total = items.length;
+      const open = items.filter(item => item.status === "open").length;
+      const mixed = items.filter(item => item.status === "mixed").length;
+      const constrained = items.filter(item => item.status === "full" || item.status === "future" || item.status === "unknown").length;
+
+      statsEl.innerHTML = [
+        { value: total, label: "carreras visibles" },
+        { value: open, label: "apertura anunciada" },
+        { value: mixed, label: "con espera o estado mixto" },
+        { value: constrained, label: "cerradas o por confirmar" }
+      ].map(stat => `
+        <article class="stat">
+          <strong>${stat.value}</strong>
+          <span>${stat.label}</span>
+        </article>
+      `).join("");
+    }
+
+    function renderMonths(items) {
+      const grouped = new Map();
+
+      items.forEach(race => {
+        const key = monthKey(race);
+        if (!grouped.has(key)) grouped.set(key, []);
+        grouped.get(key).push(race);
+      });
+
+      const monthKeys = Array.from(grouped.keys()).sort();
+
+      monthsEl.innerHTML = monthKeys.map(key => `
+        <section class="month">
+          <h2>${monthLabel(key)}</h2>
+          <div class="month-list">
+            ${grouped.get(key).map(race => {
+              const date = parseDate(race.start);
+              return `
+                <a class="month-item ${race.favorite ? "favorite-item" : ""}" href="#${race.id}" data-jump="${race.id}">
+                  <div class="daybox">
+                    <strong>${race.start ? date.getDate() : "?"}</strong>
+                    <span>${race.start ? monthNames[date.getMonth()].slice(0, 3) : "2027"}</span>
+                  </div>
+                  <div>
+                    <div>${race.favorite ? "Favorita · " : ""}${race.name}</div>
+                    <small>${race.distanceLabel}</small>
+                  </div>
+                </a>
+              `;
+            }).join("")}
+          </div>
+        </section>
+      `).join("");
+    }
+
+    function renderEvents(items) {
+      if (!items.length) {
+        eventsEl.innerHTML = `<div class="empty">No sale ninguna carrera con estos filtros. Prueba a quitar el filtro de mes o el de estado.</div>`;
+        return;
+      }
+
+      eventsEl.innerHTML = items.map(race => {
+        const start = parseDate(race.start);
+        return `
+          <article class="event ${race.favorite ? "favorite-race" : ""}" id="${race.id}">
+            <div class="event-date">
+              <strong>${race.start ? String(start.getDate()).padStart(2, "0") : "?"}</strong>
+              <div>${race.start ? monthNames[start.getMonth()] : "Por confirmar"}</div>
+              <small>${formatDateSpan(race)}</small>
+            </div>
+            <div>
+              ${race.favorite ? `<p class="favorite-banner">Carrera favorita</p>` : ""}
+              <h3>${race.name}</h3>
+              <p class="meta"><strong>${race.location}</strong> · ${race.drive}</p>
+              <div class="chips">
+                ${race.favorite ? `<span class="chip favorite">Favorita</span>` : ""}
+                ${race.registered ? `<span class="chip registered">Inscrita</span>` : ""}
+                <span class="chip ${statusClass(race.status)}">${race.statusLabel}</span>
+                <span class="chip">${race.distanceLabel}</span>
+              </div>
+              <p class="fit">${race.fit}</p>
+              <p class="availability"><strong>Inscripción y plazas:</strong> ${race.availability}</p>
+              <div class="sources">
+                ${race.urls.map(url => `<a href="${url.href}" target="_blank" rel="noreferrer">${url.label}</a>`).join("")}
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderNote(items) {
+      if (!items.length) {
+        if (state.registeredOnly) {
+          resultNoteEl.textContent = "No hay carreras marcadas como inscritas todavía.";
+          return;
+        }
+        resultNoteEl.textContent = "Sin resultados con los filtros actuales.";
+        return;
+      }
+
+      const next = items.find(race => race.start);
+      if (!next) { resultNoteEl.textContent = `${items.length} carreras visibles, con fecha por confirmar.`; return; }
+      resultNoteEl.textContent = `${items.length} carreras visibles. La primera con fecha confirmada es ${next.name}, el ${formatDateSpan(next)}.`;
+    }
+
+    function populateMonths() {
+      const uniqueMonths = Array.from(new Set(
+        races
+          .slice()
+          .sort((a, b) => (a.start ? parseDate(a.start).getTime() : Infinity) - (b.start ? parseDate(b.start).getTime() : Infinity))
+          .map(monthKey)
+      ));
+
+      monthFilterEl.innerHTML = `
+        <option value="all">Todos</option>
+        ${uniqueMonths.map(key => `<option value="${key}">${monthLabel(key)}</option>`).join("")}
+      `;
+    }
+
+    function render() {
+      const items = filteredRaces();
+      renderStats(items);
+      renderMonths(items);
+      renderEvents(items);
+      renderNote(items);
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll(".event.highlight").forEach(node => node.classList.remove("highlight"));
+    }
+
+    document.getElementById("search").addEventListener("input", event => {
+      state.search = event.target.value.trim().toLowerCase();
+      render();
+    });
+
+    document.getElementById("monthFilter").addEventListener("change", event => {
+      state.month = event.target.value;
+      render();
+    });
+
+    document.getElementById("distanceFilter").addEventListener("change", event => {
+      state.distance = event.target.value;
+      render();
+    });
+
+    document.getElementById("statusFilter").addEventListener("change", event => {
+      state.status = event.target.value;
+      render();
+    });
+
+    document.getElementById("favoriteFilter").addEventListener("change", event => {
+      state.favoriteOnly = event.target.checked;
+      render();
+    });
+
+    document.getElementById("registeredFilter").addEventListener("change", event => {
+      state.registeredOnly = event.target.checked;
+      render();
+    });
+
+    document.addEventListener("click", event => {
+      const link = event.target.closest("[data-jump]");
+      if (!link) return;
+      const target = document.getElementById(link.dataset.jump);
+      if (!target) return;
+      clearHighlights();
+      target.classList.add("highlight");
+    });
+
+    populateMonths();
+    render();
+  </script>
+</body>
+</html>
